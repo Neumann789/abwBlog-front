@@ -7,15 +7,17 @@
         </router-link>
         <div class="head-nav-left">
           <ul class="nav-list">
-            <li @click="showDialog('isShowLogin')">博客</li>
-            <li class="nav-pile">&nbsp;&nbsp;&nbsp;&nbsp;</li>
-            <li @click="showDialog('isShowReg')">分享</li>
-            <li class="nav-pile">&nbsp;&nbsp;&nbsp;&nbsp;</li>
-            <li @click="showDialog('isShowAbout')">提问</li>
+            <template v-for="field in fieldList">
+              <li @click="chgContext(field,$event)">{{field}}</li>
+            </template>
           </ul>
         </div>
         <div class="head-nav-right">
-          <ul class="nav-list">
+          <ul>
+            <li @click="showDialog('isShowLogin')">
+              搜索
+            </li>
+            <li class="nav-pile">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
             <li @click="showDialog('isShowLogin')">登录</li>
             <li class="nav-pile">|</li>
             <li @click="showDialog('isShowReg')">注册</li>
@@ -39,14 +41,39 @@
 </template>
 
 <script>
+
 export default {
   name: 'App',
+  data:function () {
+    return {
+      fieldList:[
+        '首页','专栏','后端','WEB','资讯'
+      ],
+      currentCtx:""
+    };
+  },
   methods: {
     showDialog (param) {
+
+    },
+    chgContext(ctx,e){
+      //console.log(ctx);
+      this.currentCtx = ctx;
+      var dom =e.target;
+      var childNodeList = dom.parentNode.childNodes;
+/*      for(var child:childNodeList){
+
+      }*/
+      dom.style.background = 'skyblue';
+      this.$router.push({ path: '/CommPage' })
+      //console.log(dom)
 
     }
   }
 }
+
+
+
 </script>
 
 <style>
@@ -121,5 +148,10 @@ html,body{
   position:relative;
   bottom:0px;
   z-index:-1;
+}
+
+
+.nav-list li{
+  clear:none;width:80px;text-align: center;
 }
 </style>
