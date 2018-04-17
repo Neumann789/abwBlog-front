@@ -3,23 +3,13 @@
   <!--最新内容-->
   <div id="welcome"class="welcomeCls">
       <div id="recommendArticleListDIV">
-
-        <table ref="recommendTable">
-
-<!--          <tr v-for="(article,index) in recommendArticleList" v-if="index%2 === 0">
-            <td>
-              <img src="../assets/1.png"/>
-              <p>{{recommendArticleList[index].articleTitle}}</p>
-            </td>
-            <td v-if="(index%2 == 1&&(recommendArticleList.length-1==index))==false">
-              <img src="../assets/1.png"/>
-              <p>{{recommendArticleList[index+1].articleTitle}}</p>
-            </td>
-
-          </tr>-->
-
-        </table>
+        <table ref="recommendTable"></table>
       </div>
+
+    <div id="newestListDIV">
+      <P>最近更新</P>
+      <table ref="newestArticleListTable"></table>
+    </div>
 
   </div>
 </template>
@@ -39,22 +29,32 @@
           {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
           {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
         ],
-        recommendbackground:"url(../assets/1.png) no-repeat;"
+        newestArticleList:[
+          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
+          {articleId:"2",articleTitle:"爬虫",articleDesc:"爬虫的工作原理",articleImage:"../static/蜘蛛精侠.png"},
+          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
+          {articleId:"2",articleTitle:"爬虫",articleDesc:"爬虫的工作原理",articleImage:"../static/蜘蛛精侠.png"},
+          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
+          {articleId:"2",articleTitle:"爬虫",articleDesc:"爬虫的工作原理",articleImage:"../static/蜘蛛精侠.png"},
+          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
+          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
+        ]
       }
     },
     mounted () {
-      this.init();
+      this.initRecommendArticleList();
+      this.initNewestArticleList();
     },
     methods:{
-      init() {
+      initRecommendArticleList() {
         //console.log(this.$refs.recommendTable);
         var col = 4;
         var len = this.recommendArticleList.length;
         console.log(len);
         var trs = '';
-        for(var i=0;i<len  ;i+=4){
+        for(var i=0;i<len  ;i+=col){
           var tr = '<tr>';
-          for(var j = i;j<i+4 && j<len;j++){
+          for(var j = i;j<i+col && j<len;j++){
             var td = '<td>';
             td = td + '<img src="'+this.recommendArticleList[j].articleImage+'"/>';
             td = td + '<p>'+this.recommendArticleList[j].articleTitle+'</p>';
@@ -66,6 +66,26 @@
           trs = trs + tr;
         }
         this.$refs.recommendTable.innerHTML=trs;
+
+      },
+      initNewestArticleList(){
+        var col = 2;
+        var len = this.newestArticleList.length;
+        console.log(len);
+        var trs = '';
+        for(var i=0;i<len  ;i+=col){
+          var tr = '<tr>';
+          for(var j = i;j<i+col && j<len;j++){
+            var td = '<td>';
+            td = td + '<p>'+this.newestArticleList[j].articleTitle+'</p>';
+            td =td + '</td>';
+
+            tr = tr + td;
+          }
+          tr = tr+'</tr>';
+          trs = trs + tr;
+        }
+        this.$refs.newestArticleListTable.innerHTML=trs;
 
       }
     }

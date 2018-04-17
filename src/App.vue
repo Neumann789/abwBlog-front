@@ -8,21 +8,18 @@
         <div class="head-nav-left">
           <ul class="nav-list">
             <template v-for="field in fieldList">
-              <li @click="chgContext(field,$event)">{{field}}</li>
+              <li @click="chgContext(field.fieldKey,field.fieldUrl,$event)">{{field.fieldName}}</li>
             </template>
           </ul>
         </div>
         <div class="head-nav-right">
-          <ul>
-            <li @click="showDialog('isShowLogin')">
+          <ul class="nav-list">
+            <li @click="chgContext('search','/Search',$event)">
               搜索
             </li>
-            <li class="nav-pile">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
-            <li @click="showDialog('isShowLogin')">登录</li>
-            <li class="nav-pile">|</li>
-            <li @click="showDialog('isShowReg')">注册</li>
-            <li class="nav-pile">|</li>
-            <li @click="showDialog('isShowAbout')">关于</li>
+            <li @click="chgContext('login','/Login',$event)">登录</li>
+            <li @click="chgContext('regist','/Regist',$event)">注册</li>
+            <li @click="chgContext('about','/About',$event)">关于</li>
           </ul>
         </div>
       </div>
@@ -47,7 +44,11 @@ export default {
   data:function () {
     return {
       fieldList:[
-        '首页','专栏','后端','WEB','资讯'
+        {fieldName:'首页',fieldUrl:'/',fieldKey:'home'},
+        {fieldName:'专栏',fieldUrl:'/CommPage',fieldKey:'professional'},
+        {fieldName:'后端',fieldUrl:'/CommPage',fieldKey:'backend'},
+        {fieldName:'WEB',fieldUrl:'/CommPage',fieldKey:'web'},
+        {fieldName:'资讯',fieldUrl:'/CommPage',fieldKey:'news'},
       ],
       currentCtx:""
     };
@@ -56,16 +57,22 @@ export default {
     showDialog (param) {
 
     },
-    chgContext(ctx,e){
-      //console.log(ctx);
-      this.currentCtx = ctx;
+    chgContext(fieldKey,fieldUrl,e){
+      //console.log(field);
       var dom =e.target;
+      console.log(dom.nodeType);
+      if(!dom.nodeName == 'LI'){
+          return;
+      }
       var childNodeList = dom.parentNode.childNodes;
-/*      for(var child:childNodeList){
-
-      }*/
-      dom.style.background = 'skyblue';
-      this.$router.push({ path: '/CommPage' })
+      console.log(childNodeList.length)
+      for(var i = 0;i<childNodeList.length;i++){
+        if(childNodeList[i].nodeName == 'LI'){
+          childNodeList[i].style.background = '';
+        }
+      }
+      dom.style.background = '#404040';
+      this.$router.push({ path: fieldUrl })
       //console.log(dom)
 
     }
