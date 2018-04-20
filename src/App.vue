@@ -29,17 +29,23 @@
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
+      <LoginDialog ref="loginDialog"></LoginDialog>
     </div>
     <div class="app-foot">
       <p>Copyright © 2015-2018 abaoworld. 京ICP备xxxx号</p>
     </div>
 
+
   </div>
 </template>
 
 <script>
+import LoginDialog from './components/Login.vue'
 
 export default {
+  components:{
+    LoginDialog,
+  },
   name: 'App',
   data:function () {
     return {
@@ -72,8 +78,11 @@ export default {
         }
       }
       dom.style.background = '#404040';
-      this.$router.push({ path: fieldUrl })
-      //console.log(dom)
+      if(fieldKey ==='login'){
+        this.$refs.loginDialog.$refs.loginDialog.open()
+      }else{
+        this.$router.push({ path: fieldUrl })
+      }
 
     }
   }
