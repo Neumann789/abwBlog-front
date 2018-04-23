@@ -1,67 +1,75 @@
 <template>
   <div>
-    <el-dialog title="登录" ref="loginDialog" @close="handleClose">
-      <el-form :model="form" ref="loginForm">
-        <el-form-item label="活动名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
+    <el-dialog id="loginDialog" @close="$emit('update:show',false)" :visible.sync="loginDialogVisible" :show="show" center>
+      <el-form :model="loginForm" ref="loginForm">
+        <el-form-item label="用户名" :label-width="formLabelWidth">
+          <el-input v-model="loginForm.userName" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
+        <el-form-item label="密码" :label-width="formLabelWidth">
+          <el-input type="password" v-model="loginForm.password" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="loginComfirm" center>登录</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
+<style>
+  #loginDialog{
+    width: 40%;
+    margin:auto;
+  }
+  .el-input {
+    width: 300px;
+  }
+
+</style>
 
 <script>
+  //:visible.sync="loginDialogVisible"
+  import http from "../commons/http";
+  import utils from "../commons/utils";
+  import {KEY_LOGIN_CURRENT_USER_INFO} from '../commons/constants'
+  import * as logUtils from "../commons/logUtils";
+
   export default {
     data() {
       return {
-        gridData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-        dialogTableVisible: false,
-        dialogFormVisible: false,
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+        loginForm: {
+          userName: '',
+          password:''
+
         },
-        formLabelWidth: '120px'
+        formLabelWidth: '60px',
+        loginDialogVisible: this.show,
       };
+    },
+    props:{
+      show:{
+        type:Boolean,
+        default:false
+      }
     },
     methods:{
       handleClose () {
-        this.$refs.loginDialog.close()
+        this.loginDialogVisible = false;
         this.$refs['loginForm'].resetFields()
       },
+      loginComfirm: function () {
+        http.post('/abwBlog/login', this.loginForm).then((resp) => {
+          logUtils.log(resp)
+          utils.save(KEY_LOGIN_CURRENT_USER_INFO,resp.data)
+          this.handleClose();
+          this.$emit("listenLoginEvent",resp.data)
+        });
+      }
+    },
+    watch:{
+      show(){
+        this.loginDialogVisible = this.show;
+      }
     }
   };
 </script>

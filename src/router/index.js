@@ -7,6 +7,7 @@ import Login from '@/components/Login'
 import Regist from '@/components/Regist'
 import About from '@/components/About'
 import Welcome from '@/components/Welcome'
+import UserInfoDetail from '@/components/UserInfoDetail'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/CommPage',
       name: 'CommPage',
       component: CommPage
+    },
+    {
+      path: '/UserInfoDetail',
+      name: 'UserInfoDetail',
+      component: UserInfoDetail
     }
   ]
 })

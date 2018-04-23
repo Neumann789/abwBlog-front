@@ -12,13 +12,26 @@
             </template>
           </ul>
         </div>
-        <div class="head-nav-right">
+        <div class="head-nav-right"  v-bind:class="{ login_class: isActive }" id="navRightDiv1">
           <ul class="nav-list">
             <li @click="chgContext('search','/Search',$event)">
               搜索
             </li>
             <li @click="chgContext('login','/Login',$event)">登录</li>
             <li @click="chgContext('regist','/Regist',$event)">注册</li>
+            <li @click="chgContext('about','/About',$event)">关于</li>
+          </ul>
+        </div>
+        <div class="head-nav-right" v-bind:class="{ login_class: !isActive }" id="navRightDiv2">
+          <ul class="nav-list">
+            <li @click="chgContext('search','/Search',$event)">
+              搜索
+            </li>
+            <li @click="chgContext('userInfoDetail','/UserInfoDetail',$event)" style="text-align: center;line-height: 100%;">
+              <img src="./assets/user_icon_default.jpg" width="35px" height="35px" style="margin-top: 7px"/>
+              <span style="display: inline-block; margin-top: -26px;vertical-align: middle;">{{userName}}</span>
+            </li>
+            <li @click="chgContext('loginOut','/Login',$event)">退出</li>
             <li @click="chgContext('about','/About',$event)">关于</li>
           </ul>
         </div>
@@ -29,7 +42,8 @@
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
-      <LoginDialog ref="loginDialog"></LoginDialog>
+      <LoginDialog :show.sync="show" @listenLoginEvent="handleLogin"></LoginDialog>
+      <RegistDialog :show.sync="registShow"></RegistDialog>
     </div>
     <div class="app-foot">
       <p>Copyright © 2015-2018 abaoworld. 京ICP备xxxx号</p>
@@ -41,10 +55,14 @@
 
 <script>
 import LoginDialog from './components/Login.vue'
+import RegistDialog from './components/Regist.vue'
+import utils from "./commons/utils";
+import {KEY_LOGIN_CURRENT_USER_INFO} from "./commons/constants";
 
 export default {
   components:{
     LoginDialog,
+    RegistDialog
   },
   name: 'App',
   data:function () {
@@ -56,12 +74,26 @@ export default {
         {fieldName:'WEB',fieldUrl:'/CommPage',fieldKey:'web'},
         {fieldName:'资讯',fieldUrl:'/CommPage',fieldKey:'news'},
       ],
-      currentCtx:""
+      currentCtx:"",
+      show:false,
+      registShow:false,
+      userName:"",
+      isActive:false
     };
   },
   methods: {
-    showDialog (param) {
-
+    handleLogin (currentUser) {
+      if(currentUser != null){
+        this.isActive = true;
+        //console.log("currentUser.userName:"+currentUser.userName)
+        this.userName = currentUser.userName
+        this.$router.push({ path: "/" })
+      }
+    },
+    handleLoginOut(){
+      utils.clearAll();
+      this.isActive = false;
+      this.$router.push({ path: "/" })
     },
     chgContext(fieldKey,fieldUrl,e){
       //console.log(field);
@@ -79,12 +111,21 @@ export default {
       }
       dom.style.background = '#404040';
       if(fieldKey ==='login'){
-        this.$refs.loginDialog.$refs.loginDialog.open()
+        this.show = true;
+      }else if(fieldKey ==='regist'){
+        this.registShow = true;
+      }else if(fieldKey ==='loginOut'){
+        this.handleLoginOut();
       }else{
         this.$router.push({ path: fieldUrl })
       }
 
     }
+  },
+  mounted(){
+    let currentUser = utils.read(KEY_LOGIN_CURRENT_USER_INFO);
+    //console.log(currentUser)
+    this.handleLogin(currentUser);
   }
 }
 
@@ -170,4 +211,9 @@ html,body{
 .nav-list li{
   clear:none;width:80px;text-align: center;
 }
+
+.login_class{
+  display:none;
+}
+
 </style>
