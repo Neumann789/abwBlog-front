@@ -5,16 +5,18 @@
     <div id="newestListDIV">
       <P>最近更新</P>
       <el-row :gutter="15">
-        <el-col :span="4" v-for="(content, index) in newestContentList"  :offset="0.5"  @click.native="contentShow(content.id)" @mouseenter.native="cardEnter($event)" @mouseleave.native="cardLeave($event)">
-          <el-card :body-style="{ padding: '0px' }"><!--style="box-shadow: 10px 10px 5px #888888"-->
-            <img :src="content.themeImage|| '../static/蜘蛛精侠.png'" class="image" @hover="">
+        <el-col :span="4" v-for="(content, index) in newestContentList" :key="content.id"  :offset="0.5"  @click.native="contentShow(content.id)" @mouseenter.native="cardEnter($event)" @mouseleave.native="cardLeave($event)">
+          <el-card :body-style="{ padding: '0px' }" >
+            <img :src="content.themeImage|| '../static/蜘蛛精侠.png'" class="image" :title="content.title">
             <div style="padding: 14px;font-size: 13px;color: #999;">
               <el-row>
-                <el-col :span="10" style="float:left">
-                  <span>{{content.title|shortFormat}}</span>
+                <el-col style="float:left">
+                  <span>标题: {{content.title|shortFormat}}</span>
                 </el-col>
-                <el-col :span="10"  style="float:right">
-                  <span>分类:{{content.category| categoryFormat}}</span>
+              </el-row>
+              <el-row>
+                <el-col style="float:left">
+                  <span>分类: {{content.category| categoryFormat}}</span>
                 </el-col>
               </el-row>
               <div class="bottom clearfix" style="text-align: left">

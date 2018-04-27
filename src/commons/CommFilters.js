@@ -16,7 +16,7 @@ function categoryFormat(category) {
   return utils.configData.data[key].configVal
 }
 
-function shortFormat(msg,len = 8) {
+function shortFormat(msg,len = 10) {
   if(msg.length>len){
     return msg.substr(0,len).concat("...")
   }else{
