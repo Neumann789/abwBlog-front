@@ -1,7 +1,12 @@
 /*提供相关的工具方法*/
 
+import http from "./http";
+import {ABWBLOG_CONFIG, KEY_ALL_CONFIG} from "./constants";
+
 const storage = window.sessionStorage
+const configData = {}
 export  default {
+  configData,
   save:function (key,value) {
     if(typeof value === 'object'){
       value = JSON.stringify(value )
@@ -29,5 +34,20 @@ export  default {
   },
   clearAll:function () {
       storage.clear();
-  }
+  },
+  loadConfig:function (f) {
+    http.post(ABWBLOG_CONFIG,{}).then((resp)=>{
+      configData.data = resp.data
+      f(configData.data)
+    })
+  },
+/*  getAllConfig:function () {
+    configData.data = this.read(KEY_ALL_CONFIG)
+    if(typeof(configData) == "undefined"){
+      this.loadConfig()
+      configData.data = this.read(KEY_ALL_CONFIG)
+    }
+    return configData
+
+  }*/
 }

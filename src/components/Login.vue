@@ -18,7 +18,7 @@
 
 <style>
   #loginDialog{
-    width: 40%;
+    width: 50%;
     margin:auto;
   }
   .el-input {

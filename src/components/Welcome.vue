@@ -2,55 +2,66 @@
 <!--推荐内容-->
   <!--最新内容-->
   <div id="welcome"class="welcomeCls">
-      <div id="recommendArticleListDIV">
-        <table ref="recommendTable"></table>
-      </div>
-
     <div id="newestListDIV">
       <P>最近更新</P>
-      <table ref="newestArticleListTable"></table>
+      <el-row :gutter="15">
+        <el-col :span="4" v-for="(content, index) in newestContentList"  :offset="0.5"  @click.native="contentShow(content.id)" @mouseenter.native="cardEnter($event)" @mouseleave.native="cardLeave($event)">
+          <el-card :body-style="{ padding: '0px' }"><!--style="box-shadow: 10px 10px 5px #888888"-->
+            <img :src="content.themeImage|| '../static/蜘蛛精侠.png'" class="image" @hover="">
+            <div style="padding: 14px;font-size: 13px;color: #999;">
+              <el-row>
+                <el-col :span="10" style="float:left">
+                  <span>{{content.title|shortFormat}}</span>
+                </el-col>
+                <el-col :span="10"  style="float:right">
+                  <span>分类:{{content.category| categoryFormat}}</span>
+                </el-col>
+              </el-row>
+              <div class="bottom clearfix" style="text-align: left">
+                <time class="time">更新时间:{{ content.modifyTime | timeFormat }}</time>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+
     </div>
+
+
 
   </div>
 </template>
 
 <script>
 
+  import http from "../commons/http";
+  import {ABWBLOG_SEARCH_CONTENT_LIST} from "../commons/constants";
+  import ElRow from "element-ui/packages/row/src/row";
+  import ElCol from "element-ui/packages/col/src/col";
+
   export default {
+    components: {
+      ElCol,
+      ElRow},
     data(){
       return {
-        recommendArticleList:[
-          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
-          {articleId:"2",articleTitle:"爬虫",articleDesc:"爬虫的工作原理",articleImage:"../static/蜘蛛精侠.png"},
-          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
-          {articleId:"2",articleTitle:"爬虫",articleDesc:"爬虫的工作原理",articleImage:"../static/蜘蛛精侠.png"},
-          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
-          {articleId:"2",articleTitle:"爬虫",articleDesc:"爬虫的工作原理",articleImage:"../static/蜘蛛精侠.png"},
-          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
-          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
-        ],
-        newestArticleList:[
-          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
-          {articleId:"2",articleTitle:"爬虫",articleDesc:"爬虫的工作原理",articleImage:"../static/蜘蛛精侠.png"},
-          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
-          {articleId:"2",articleTitle:"爬虫",articleDesc:"爬虫的工作原理",articleImage:"../static/蜘蛛精侠.png"},
-          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
-          {articleId:"2",articleTitle:"爬虫",articleDesc:"爬虫的工作原理",articleImage:"../static/蜘蛛精侠.png"},
-          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
-          {articleId:"1",articleTitle:"物联网渗透",articleDesc:"物联网是如何渗透的",articleImage:"../static/物联网渗透.png"},
-        ]
+        newestContentList:[]
       }
     },
-    mounted () {
-      this.initRecommendArticleList();
-      this.initNewestArticleList();
+    mounted: function() {
+      this.loadData();
+    },
+    watch:{
+      '$route' (to, from) {
+        this.loadData();
+      }
     },
     methods:{
-      initRecommendArticleList() {
+      /*initRecommendArticleList() {
         //console.log(this.$refs.recommendTable);
         var col = 4;
         var len = this.recommendArticleList.length;
-        console.log(len);
+       // console.log(len);
         var trs = '';
         for(var i=0;i<len  ;i+=col){
           var tr = '<tr>';
@@ -69,15 +80,15 @@
 
       },
       initNewestArticleList(){
-        var col = 2;
+        var col = 1;
         var len = this.newestArticleList.length;
-        console.log(len);
+        //console.log(len);
         var trs = '';
         for(var i=0;i<len  ;i+=col){
           var tr = '<tr>';
           for(var j = i;j<i+col && j<len;j++){
             var td = '<td>';
-            td = td + '<p>'+this.newestArticleList[j].articleTitle+'</p>';
+            td = td + '<p>'+this.newestArticleList[j].title+'</p>';
             td =td + '</td>';
 
             tr = tr + td;
@@ -87,12 +98,34 @@
         }
         this.$refs.newestArticleListTable.innerHTML=trs;
 
+      },*/
+      cardEnter:function (e) {
+        e.target.style.boxShadow = '10px 10px 5px #888888'
+      },
+      cardLeave:function (e) {
+        e.target.style.boxShadow = ''
+      },
+      loadData:function () {
+        let params = {
+        }
+        http.post(ABWBLOG_SEARCH_CONTENT_LIST,params).then((resp)=>{
+          this.newestContentList = resp.data
+        })
+      },
+      contentShow:function (contentId) {
+        this.$router.push({
+          path:"/ContentShow",
+          query:{
+            contentId:contentId
+          }
+        })
       }
     }
   }
 
 </script>
 <style>
+/*
   .index-board-car {
     background: url(../assets/1.png) no-repeat;
   }
@@ -101,9 +134,36 @@
     min-height: 125px;
     padding-left: 120px;
   }
+*/
 
   .welcomeCls{
-    margin:20px auto;
+    margin:50px auto;
   }
 
+   .time {
+     font-size: 13px;
+     color: #999;
+   }
+
+  .bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
+
+  .image {
+    width: 100%;
+    height: 160px;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both
+  }
 </style>
+

@@ -8,24 +8,35 @@
         <div class="head-nav-left">
           <ul class="nav-list">
             <template v-for="field in fieldList">
-              <li @click="chgContext(field.fieldKey,field.fieldUrl,$event)">{{field.fieldName}}</li>
+              <li @click="chgContext(field.configKey,field.extMap.fieldUrl,$event)">{{field.configVal}}</li>
             </template>
           </ul>
         </div>
-        <div class="head-nav-right"  v-bind:class="{ login_class: isActive }" id="navRightDiv1">
+        <div class="head-nav-right"  v-bind:class="{ login_class: isActive }" >
           <ul class="nav-list">
-            <li @click="chgContext('search','/Search',$event)">
-              搜索
+            <li style="width: 325px">
+              <el-input
+                placeholder="请输入内容"
+                prefix-icon="el-icon-search"
+                v-model="searchKey">
+              </el-input>
             </li>
             <li @click="chgContext('login','/Login',$event)">登录</li>
             <li @click="chgContext('regist','/Regist',$event)">注册</li>
             <li @click="chgContext('about','/About',$event)">关于</li>
           </ul>
         </div>
-        <div class="head-nav-right" v-bind:class="{ login_class: !isActive }" id="navRightDiv2">
+        <div class="head-nav-right" v-bind:class="{ login_class: !isActive }">
           <ul class="nav-list">
-            <li @click="chgContext('search','/Search',$event)">
-              搜索
+            <li style="width: 325px">
+              <el-input
+                placeholder="请输入内容"
+                prefix-icon="el-icon-search"
+                v-model="searchKey">
+              </el-input>
+            </li>
+            <li @click="chgContext('create','/Create',$event)">
+              <span  class="el-icon-edit-outline" >创作</span>
             </li>
             <li @click="chgContext('userInfoDetail','/UserInfoDetail',$event)" style="text-align: center;line-height: 100%;">
               <img src="./assets/user_icon_default.jpg" width="35px" height="35px" style="margin-top: 7px"/>
@@ -57,7 +68,8 @@
 import LoginDialog from './components/Login.vue'
 import RegistDialog from './components/Regist.vue'
 import utils from "./commons/utils";
-import {KEY_LOGIN_CURRENT_USER_INFO} from "./commons/constants";
+import {ABWBLOG_CONFIG, KEY_LOGIN_CURRENT_USER_INFO} from "./commons/constants";
+import http from "./commons/http";
 
 export default {
   components:{
@@ -67,18 +79,13 @@ export default {
   name: 'App',
   data:function () {
     return {
-      fieldList:[
-        {fieldName:'首页',fieldUrl:'/',fieldKey:'home'},
-        {fieldName:'专栏',fieldUrl:'/CommPage',fieldKey:'professional'},
-        {fieldName:'后端',fieldUrl:'/CommPage',fieldKey:'backend'},
-        {fieldName:'WEB',fieldUrl:'/CommPage',fieldKey:'web'},
-        {fieldName:'资讯',fieldUrl:'/CommPage',fieldKey:'news'},
-      ],
+      fieldList:[],
       currentCtx:"",
       show:false,
       registShow:false,
       userName:"",
-      isActive:false
+      isActive:false,
+      searchKey:""
     };
   },
   methods: {
@@ -98,7 +105,7 @@ export default {
     chgContext(fieldKey,fieldUrl,e){
       //console.log(field);
       var dom =e.target;
-      console.log(dom.nodeType);
+      //console.log(dom.nodeType);
       if(!dom.nodeName == 'LI'){
           return;
       }
@@ -117,12 +124,21 @@ export default {
       }else if(fieldKey ==='loginOut'){
         this.handleLoginOut();
       }else{
-        this.$router.push({ path: fieldUrl })
+        this.$router.push(
+          { path: fieldUrl,
+            query:{
+              category:fieldKey
+            }
+          })
       }
 
     }
   },
   mounted(){
+    utils.loadConfig((config)=>{
+      this.fieldList = config.navList
+    })
+
     let currentUser = utils.read(KEY_LOGIN_CURRENT_USER_INFO);
     //console.log(currentUser)
     this.handleLogin(currentUser);
@@ -157,7 +173,7 @@ html,body{
   }
 
 .app-head-inner {
-  width: 1200px;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -189,7 +205,8 @@ html,body{
 }
 
 .container {
-  width: 1200px;
+  width: 75%;
+  height:900px;
   margin: 0 auto;
 }
 

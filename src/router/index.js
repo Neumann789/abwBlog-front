@@ -8,10 +8,13 @@ import Regist from '@/components/Regist'
 import About from '@/components/About'
 import Welcome from '@/components/Welcome'
 import UserInfoDetail from '@/components/UserInfoDetail'
+import Create from '@/components/Create'
+import ContentShow from '@/components/ContentShow'
 
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
 /*    {
       path: '/',
@@ -52,6 +55,16 @@ export default new Router({
       path: '/UserInfoDetail',
       name: 'UserInfoDetail',
       component: UserInfoDetail
+    },
+    {
+      path: '/Create',
+      name: 'Create',
+      component: Create
+    },
+    {
+      path: '/ContentShow',
+      name: 'ContentShow',
+      component: ContentShow
     }
   ]
 })
