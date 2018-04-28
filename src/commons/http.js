@@ -2,7 +2,8 @@
 import Vue from 'vue'
 import axios from "axios";
 
-const REQUEST_URL = 'http://127.0.0.1:58080';
+//const REQUEST_URL = 'http://127.0.0.1:58080';
+const REQUEST_URL = 'http://192.168.9.75:58080';
 
 axios.defaults.baseURL = REQUEST_URL
 

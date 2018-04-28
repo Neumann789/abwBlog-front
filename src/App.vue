@@ -134,13 +134,23 @@ export default {
 
     }
   },
+  watch:{
+    searchKey:function () {
+      //console.log('searchKey',this.searchKey)
+      this.$router.push({
+        path:"/Search",
+        query:{
+          searchContent:this.searchKey
+        }
+      })
+    }
+  },
   mounted(){
     utils.loadConfig((config)=>{
       this.fieldList = config.navList
     })
 
     let currentUser = utils.read(KEY_LOGIN_CURRENT_USER_INFO);
-    //console.log(currentUser)
     this.handleLogin(currentUser);
   }
 }
@@ -206,7 +216,7 @@ html,body{
 
 .container {
   width: 75%;
-  height:900px;
+  /*height:900px;*/
   margin: 0 auto;
 }
 
