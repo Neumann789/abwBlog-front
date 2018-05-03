@@ -58,6 +58,7 @@
     },
     mounted: function() {
       let category = this.$router.currentRoute.query.category
+      //console.log("mounted to.query.searchContent",to,from)
       if(typeof(category) != "undefined" ) {
         this.loadData(category);
       }
@@ -65,6 +66,7 @@
     watch:{
       '$route' (to, from) {
         let searchContent = to.query.searchContent
+        //console.log("$route to.query.searchContent",to,from)
         if(typeof(searchContent) != "undefined" ) {
           this.loadData(searchContent);
         }
@@ -78,6 +80,8 @@
         e.target.style.boxShadow = ''
       },
       loadData:function (searchContent) {
+
+        console.log("loadData",searchContent)
         let params = {
           content:searchContent
         }

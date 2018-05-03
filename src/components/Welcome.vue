@@ -108,6 +108,8 @@
         e.target.style.boxShadow = ''
       },
       loadData:function () {
+
+        console.log("welcome loadData");
         let params = {
         }
         http.post(ABWBLOG_SEARCH_CONTENT_LIST,params).then((resp)=>{

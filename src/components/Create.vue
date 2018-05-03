@@ -26,14 +26,20 @@
       </el-form-item>
 
       <el-form-item prop="themeImage">
-        <el-upload
-          :action="uploadUrl"
-          :on-success="handleSuccess"
-          :on-exceed="handleExceed"
-          :limit="1"
-          :file-list="fileList">
-          <el-button size="small" type="success">主题图片上传</el-button>
-        </el-upload>
+        <el-checkbox v-model="isUpload">上传图片</el-checkbox>
+        <div ref="picUpload" style="display: none">
+          <el-upload
+            :action="uploadUrl"
+            :on-success="handleSuccess"
+            :on-exceed="handleExceed"
+            :limit="1"
+            :file-list="fileList">
+            <el-button size="small" type="success">上传</el-button>
+          </el-upload>
+        </div>
+        <div ref="picInput">
+        <el-input  v-model="contentForm.themeImage" placeholder="图片链接"></el-input>
+        </div>
       </el-form-item>
       <el-form-item style="text-align: center;width: 100%;">
         <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -79,6 +85,7 @@
         },
         fileList:[],
         fieldList:[],
+        isUpload:false
 
       };
     },
@@ -91,6 +98,16 @@
       eContent:function (val) {
         console.log("eContent",val)
         this.contentForm.content = val;
+      },
+      isUpload:function (val) {
+        //console.log("isUpload"+val,this.$refs.picUpload,this.$refs.picInput);
+        if(val === true){
+          this.$refs.picUpload.style.display = "block";
+          this.$refs.picInput.style.display = "none";
+        }else{
+          this.$refs.picUpload.style.display = "none";
+          this.$refs.picInput.style.display = "block";
+        }
       }
     },
 
@@ -139,6 +156,8 @@
       utils.loadConfig((config)=>{
         this.fieldList = config.navList
       })
+
+
     }
   }
 </script>
