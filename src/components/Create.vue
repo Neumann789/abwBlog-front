@@ -22,7 +22,7 @@
       </el-row>
 
       <el-form-item label="内容" prop="name">
-        <editor @updateParentContent="updateParentContent"></editor>
+        <editor @updateParentContent="updateParentContent" initContent="你好" editorHeight=600></editor>
       </el-form-item>
 
       <el-form-item prop="themeImage">

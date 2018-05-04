@@ -41,6 +41,16 @@ export  default {
       f(configData.data)
     })
   },
+  timeFormat:function (input) {
+    var value=new Date(input);
+    var year=value.getFullYear();
+    var month=value.getMonth()+1;
+    var day=value.getDate();
+    var hour=value.getHours();
+    var minutes=value.getMinutes();
+    var seconds=value.getSeconds();
+    return year+'-'+month+'-'+day+' '+hour+':'+minutes+':'+seconds;
+  }
 /*  getAllConfig:function () {
     configData.data = this.read(KEY_ALL_CONFIG)
     if(typeof(configData) == "undefined"){

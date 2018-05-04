@@ -13,8 +13,8 @@ import ContentShow from '@/components/ContentShow'
 
 Vue.use(Router)
 
-export default new Router({
-  mode: 'history',
+const thatRouter = new Router({
+  mode: 'hash',//如果使用history方法 服务器需要做特殊配置，直接刷新的时候会报错
   routes: [
 /*    {
       path: '/',
@@ -68,3 +68,8 @@ export default new Router({
     }
   ]
 })
+// thatRouter.beforeEach((to, from, next) => {
+//     console.log(to, from, next,777)
+// })
+
+export default thatRouter

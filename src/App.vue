@@ -50,9 +50,9 @@
     </div>
 
     <div class="container">
-      <keep-alive>
+      <!--<keep-alive>--><!--此处巨坑，导致页面跳转时，路由页面时mounted没有被触发-->
         <router-view></router-view>
-      </keep-alive>
+      <!--</keep-alive>-->
       <LoginDialog :show.sync="show" @listenLoginEvent="handleLogin"></LoginDialog>
       <RegistDialog :show.sync="registShow"></RegistDialog>
     </div>

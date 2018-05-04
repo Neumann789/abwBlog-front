@@ -3,18 +3,14 @@
         <!--<div ref="editor" style="text-align:left"></div>-->
       <div id="headerEditor" class="toolbar"></div>
       <!--<div style="padding: 5px 0; color: #ccc">中间隔离带</div>-->
-      <div id="textEditor" class="text" style="text-align:left">
-        <p>请输入内容</p>
+      <div id="textEditor" :style="{'text-align':'left','border':'1px solid #ccc','height':editorHeight+'px'}">
+        <p>{{initContent}}</p>
       </div>
     </div>
 </template>
 <style type="text/css">
   .toolbar {
     border: 1px solid #ccc;
-  }
-  .text {
-    border: 1px solid #ccc;
-    height: 600px;
   }
 </style>
 
@@ -27,11 +23,16 @@
       name: 'editor',
       data () {
         return {
-          editorContent: this.content
+          editorContent: this.content,
         }
       },
       props: {
-        content:String
+        content:String,
+        initContent:String,
+        editorHeight:{
+          type: Number,
+          default: 200
+        }
       },
 
       methods: {

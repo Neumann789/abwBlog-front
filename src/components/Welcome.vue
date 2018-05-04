@@ -54,9 +54,9 @@
       this.loadData();
     },
     watch:{
-      '$route' (to, from) {
+ /*     '$route' (to, from) {
         this.loadData();
-      }
+      }*/
     },
     methods:{
       /*initRecommendArticleList() {

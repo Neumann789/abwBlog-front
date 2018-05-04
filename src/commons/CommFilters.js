@@ -11,9 +11,10 @@ function timeFormat (input) {
   return year+'-'+month+'-'+day+' '+hour+':'+minutes+':'+seconds;
 }
 
-function categoryFormat(category) {
+function categoryFormat(category)  {
   let key = 'navList_'+ category
-  return utils.configData.data[key].configVal
+  console.log("categoryFormat",key)
+  return utils.configData.data[key].configVal || key
 }
 
 function shortFormat(msg,len = 10) {
